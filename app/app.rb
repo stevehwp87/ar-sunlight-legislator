@@ -1,5 +1,7 @@
 require_relative 'models/congressman.rb'
 require_relative 'models/state.rb'
+require 'twitter'
+require 'nokogiri'
 
 
 
@@ -105,3 +107,46 @@ require_relative 'models/state.rb'
       # array
 
   end
+
+  @client = Twitter::REST::Client.new do |config|
+  config.consumer_key        = "7jT3P3YScr5vv9aMUDdsq8uM2"
+  config.consumer_secret     = 'H2TKJUzhLyni774wA9rOuhJPLIvUq5aA4ZjHxh6Z4dfjUDmTIb'
+  config.access_token        = "3050321708-r1zdlnPVDzQttQqvu2BrWNKjmHTY7Wph1EWz51G"
+  config.access_token_secret = '6ucwAKh0IGb2qI7RyqxEPl0mUCGOLQFGoLlyy1fQero6k'
+end
+
+def fetch_user
+
+  @client.user_timeline("NajibRazak")
+
+end
+
+def get_tweet(twitter_id)
+
+    @client.user_timeline(twitter_id).take(10).collect do |tweet|
+        # tweet = Nokogiri.HTML(tweet.text).text
+        tweet = tweet.text
+
+        puts tweet
+    end
+end
+
+
+
+
+
+# puts "Please enter a congress member id: "
+# cm_id = gets.chomp
+# member = CongressMember.find(cm_id.to_i)
+# raise "Error: Unable to find user." if member.nil?
+# raise "Error: This user has no twitter id." if member.twitter_id.nil?
+# client.user_timeline(member.twitter_id).take(10).collect do |tweet|
+#     begin
+#         insert = member.tweets.create!(
+#             :tweet_id => tweet.id,
+#             :tweet_text => Nokogiri.HTML(tweet.text).text
+#         )
+#         puts "#{member.firstname}: #{insert.tweet_text}"
+#     rescue
+#         puts "Tweet id: #{tweet.id} already exists."
+#     end

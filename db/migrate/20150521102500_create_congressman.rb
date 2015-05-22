@@ -32,6 +32,7 @@ class CreateCongressman < ActiveRecord::Migration
       c.string :official_rss
       c.string :senate_class
       c.string :birthdate
+      c.string :type
 
     end
   end
