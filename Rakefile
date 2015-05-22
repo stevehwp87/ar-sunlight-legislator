@@ -1,7 +1,7 @@
 require 'rake'
 require 'rspec/core/rake_task'
 require_relative 'db/config'
-
+require_relative 'lib/sunlight_legislators_importer'
 
 desc "create the database"
 task "db:create" do
@@ -13,6 +13,10 @@ task "db:drop" do
   rm_f 'db/ar-sunlight-legislators.sqlite3'
 end
 
+task "console" do
+  exec 'irb -r./app.rb'
+end
+
 desc "migrate the database (options: VERSION=x, VERBOSE=false, SCOPE=blog)."
 task "db:migrate" do
   ActiveRecord::Migrator.migrations_paths << File.dirname(__FILE__) + 'db/migrate'
@@ -20,6 +24,11 @@ task "db:migrate" do
   ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths, ENV["VERSION"] ? ENV["VERSION"].to_i : nil) do |migration|
     ENV["SCOPE"].blank? || (ENV["SCOPE"] == migration.scope)
   end
+end
+
+desc "populate the test database with sample data"
+task "db:populate" do
+  SunlightLegislatorsImporter.import('db/data/legislators.csv')
 end
 
 desc 'Retrieves the current schema version number'
