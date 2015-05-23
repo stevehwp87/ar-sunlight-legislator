@@ -100,12 +100,21 @@ require 'nokogiri'
         # array  << [x[0], rep_par.count, sen_par.count]
           # NEED TO SORT BY THE MOST CONGRESSMAN!!!
 
+          array  << [x[0], rep_par.count, sen_par.count]
 
-        puts "#{x[0]}: Senators: #{sen_par.count}, Representative(s): #{rep_par.count}"
+
+        # puts "#{x[0]}: Senators: #{sen_par.count}, Representative(s): #{rep_par.count}"
       end
 
-      # array
+      # array.each do |y|
 
+      k = array.sort_by{|a| [a[1],a[2]]}
+      p = k.reverse
+      p.each do |o|
+
+        puts "#{o[0]}:  Representative(s): #{o[2]}, Senators: #{o[1]}"
+
+      end
   end
 
   @client = Twitter::REST::Client.new do |config|
